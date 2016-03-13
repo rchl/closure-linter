@@ -32,6 +32,8 @@ class JavaScriptTokenType(tokens.TokenType):
   COMMENT = 'comment'
   SINGLE_QUOTE_STRING_START = "'string"
   SINGLE_QUOTE_STRING_END = "string'"
+  LITERAL_STRING_START = "`string"
+  LITERAL_STRING_END = "string`"
   DOUBLE_QUOTE_STRING_START = '"string'
   DOUBLE_QUOTE_STRING_END = 'string"'
   STRING_TEXT = 'string'
@@ -63,6 +65,7 @@ class JavaScriptTokenType(tokens.TokenType):
 
   STRING_TYPES = frozenset([
       SINGLE_QUOTE_STRING_START, SINGLE_QUOTE_STRING_END,
+      LITERAL_STRING_START, LITERAL_STRING_END,
       DOUBLE_QUOTE_STRING_START, DOUBLE_QUOTE_STRING_END, STRING_TEXT])
 
   COMMENT_TYPES = frozenset([
@@ -92,7 +95,8 @@ class JavaScriptTokenType(tokens.TokenType):
   # x.y or [1, 2], or (10 + 9) or {a: 10}.
   EXPRESSION_ENDER_TYPES = [tokens.TokenType.NORMAL, IDENTIFIER, NUMBER,
                             SIMPLE_LVALUE, END_BRACKET, END_PAREN, END_BLOCK,
-                            SINGLE_QUOTE_STRING_END, DOUBLE_QUOTE_STRING_END]
+                            SINGLE_QUOTE_STRING_END, DOUBLE_QUOTE_STRING_END,
+                            LITERAL_STRING_END]
 
 
 class JavaScriptToken(tokens.Token):

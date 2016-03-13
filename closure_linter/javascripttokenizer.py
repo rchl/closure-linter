@@ -36,6 +36,7 @@ class JavaScriptModes(object):
   TEXT_MODE = 'text'
   SINGLE_QUOTE_STRING_MODE = 'single_quote_string'
   DOUBLE_QUOTE_STRING_MODE = 'double_quote_string'
+  LITERAL_STRING_MODE = 'literal_quote_string'
   BLOCK_COMMENT_MODE = 'block_comment'
   DOC_COMMENT_MODE = 'doc_comment'
   DOC_COMMENT_LEX_SPACES_MODE = 'doc_comment_spaces'
@@ -73,6 +74,8 @@ class JavaScriptTokenizer(tokenizer.Tokenizer):
   # strings.
   SINGLE_QUOTE = re.compile(r"'")
   SINGLE_QUOTE_TEXT = re.compile(r"([^'\\]|\\(.|$))+")
+  LITERAL_QUOTE = re.compile(r"`")
+  LITERAL_QUOTE_TEXT = re.compile(r"([^`\\]|\\(.|$))+")
   DOUBLE_QUOTE = re.compile(r'"')
   DOUBLE_QUOTE_TEXT = re.compile(r'([^"\\]|\\(.|$))+')
 
@@ -342,6 +345,8 @@ class JavaScriptTokenizer(tokenizer.Tokenizer):
                     JavaScriptModes.SINGLE_QUOTE_STRING_MODE),
             Matcher(cls.DOUBLE_QUOTE, Type.DOUBLE_QUOTE_STRING_START,
                     JavaScriptModes.DOUBLE_QUOTE_STRING_MODE),
+            Matcher(cls.LITERAL_QUOTE, Type.LITERAL_STRING_START,
+                    JavaScriptModes.LITERAL_STRING_MODE),
             Matcher(cls.REGEX, Type.REGEX),
 
             # Next we check for start blocks appearing outside any of the items
@@ -389,6 +394,12 @@ class JavaScriptTokenizer(tokenizer.Tokenizer):
         JavaScriptModes.DOUBLE_QUOTE_STRING_MODE: [
             Matcher(cls.DOUBLE_QUOTE_TEXT, Type.STRING_TEXT),
             Matcher(cls.DOUBLE_QUOTE, Type.DOUBLE_QUOTE_STRING_END,
+                    JavaScriptModes.TEXT_MODE)],
+
+        # Matchers for literal quote strings.
+        JavaScriptModes.LITERAL_STRING_MODE: [
+            Matcher(cls.LITERAL_QUOTE_TEXT, Type.STRING_TEXT),
+            Matcher(cls.LITERAL_QUOTE, Type.LITERAL_STRING_END,
                     JavaScriptModes.TEXT_MODE)],
 
         # Matchers for block comments.
